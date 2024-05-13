@@ -39,15 +39,19 @@ body{
     padding: 20px 0px;
     font-size: 24px;
 }
+.container .saldo p{
+    font-size: 20px;
+}
 .container .titulo h2{
     font-weight: 600;
+    font-size: 40px;
 }
 .container .saldo{
     width: 100%;
     padding: 10px 40px;
 }
 .container .saldo #saldo{
-    font-size: 32px;
+    font-size: 50px;
     font-weight: 600;
 }
 .container .saldo p button{
@@ -63,7 +67,7 @@ body{
     border-radius: 40px 40px 0px 0px;
     position: relative;
     top: -40px;
-    padding: 20px;
+    padding: 40px 20px;
 }
 .lista .inputs{
     display: flex;
@@ -75,20 +79,21 @@ body{
     font-size: 18px;
     width: 100%;
     border: none;
-    padding: 8px 15px;
+    padding: 20px 15px;
     border-radius: 10px;
     box-shadow: rgba(0, 0, 0, 0.15) 1.95px 1.95px 2.6px;
     cursor: pointer;
+    font-size: 24px;
 }
 .lista .inputs #nomeConta:hover, #valorConta:hover, #dataConta:hover{
     box-shadow: rgba(0, 0, 0, 0.35) 0px 5px 15px;
     transition: 0.4s;
 }
 .lista .inputs button{
-    width: 120px;
-    height: 40px;
-    font-size: 18px;
-    font-weight: 600;
+    width: 130px;
+    height: 45px;
+    font-size: 22px;
+    font-weight: 500;
     border: none;
     border-radius: 15px;
     background-color: #009394;
@@ -102,29 +107,44 @@ body{
     background-color: #007878;
 }
 .titulohistorico{
-    color: #434343;
-    padding: 20px 0px;
+    color: #767676;
+    padding-top: 20px;
 }
 #listaContas label{
     display: flex;
+    justify-content: space-between;
     gap: 20px;
     border-radius: 20px;
     padding: 10px;
     box-shadow: rgba(0, 0, 0, 0.15) 1.95px 1.95px 2.6px;
+    margin-bottom: 20px;
 }
 #listaContas label:hover{
     box-shadow: rgba(0, 0, 0, 0.35) 0px 5px 15px;
     transition: 0.4s;
 }
-#listaContas label button{
+#listaContas label .checklabel{
+    display: flex;
+    justify-content: center;
+}
+#listaContas label .checklabel input{
+    width: 20px;
+}
+#listaContas label .textlabel{
+    width: 75%;
+}
+#listaContas label .botaolabel{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+#listaContas label .botaolabel button{
     background-color: #009394;
     height: 50px;
     padding: 0px 10px;
     border-radius: 12px;
     border: none;
     cursor: pointer;
-    position: absolute;
-    right: 30px;
 }
 #listaContas label button:hover{
     box-shadow: rgba(0, 0, 0, 0.35) 0px 5px 15px;

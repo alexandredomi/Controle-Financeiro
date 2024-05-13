@@ -12,7 +12,7 @@
 <body>
 <div class="container">
     <div class="titulo">
-        <h2>Controle Financeiro</h2>
+        <h2>Finanças</h2>
     </div>
     <div class="saldo">
         <p>Salário atual:</p>
@@ -97,9 +97,15 @@
             const isChecked = conta.pago ? 'checked' : '';
             div.innerHTML = `
                 <label>
-                    <input type="checkbox" onclick="marcarPago(this)" ${isChecked}>
-                    ${conta.nome}: R$ ${conta.valor} <br> ${dataFormatada}
-                    <button onclick="excluirConta(${index})"><img src="img/lixeira.png" alt=""></button>
+                    <div class="checklabel">
+                        <input type="checkbox" onclick="marcarPago(this)" ${isChecked}>
+                    </div>
+                    <div class="textlabel">
+                        ${conta.nome} <br> R$ ${conta.valor} <br> ${dataFormatada}
+                    </div>
+                    <div class="botaolabel">
+                        <button onclick="excluirConta(${index})"><img src="img/lixeira.png" alt=""></button>
+                    </div>    
                 </label>
             `;
             listaContas.appendChild(div);
