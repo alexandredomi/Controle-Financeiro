@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<!--titulo da pagina-->
+<title>Contas a Pagar</title>
+<!--conte family-->
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap" rel="stylesheet">
+<!--link css-->
+<link rel="stylesheet" href="style.css">
+
+</head>
+<body>
+<div class="container">
+    <div class="titulo">
+        <h2>Controle Finançeiro</h2>
+    </div>
+    <div class="saldo">
+        <p>Salário atual:</p>
+            <p>R$ <span id="saldo" contenteditable="true" onblur="atualizarSalario()">3000</span><button onclick="editarSalario()"><img src="img/escrever.png" alt=""></button></p> 
+    </div>
+</div>
+<div class="lista">
+    <div class="inputs">
+        <input type="text" id="nomeConta" placeholder="Nome da conta">
+        <input type="number" id="valorConta" placeholder="Valor da conta">
+        <input type="date" id="dataConta" placeholder="Data de vencimento">
+        <button onclick="adicionarConta()">Guardar</button>
+    </div>
+    <h2 class="titulohistorico">Historico</h2>
+    <div id="listaContas" data-posicao="0"></div>
+</div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Sortable/1.13.0/Sortable.min.js"></script>
+<script>
+    let saldo = localStorage.getItem('saldo') ? parseFloat(localStorage.getItem('saldo')) : 3000;
+    let contas = localStorage.getItem('contas') ? JSON.parse(localStorage.getItem('contas')) : [];
+    let sortable;
+
+    // Função para atualizar o saldo quando a página é carregada
+    window.onload = function() {
+        atualizarSaldoInicial();
+    }
+
+    function atualizarSaldoInicial() {
+        document.getElementById("saldo").innerText = saldo.toFixed(2);
+    }
+
+    function atualizarSalario() {
+        saldo = parseFloat(document.getElementById("saldo").innerText);
+        localStorage.setItem('saldo', saldo);
+    }
+
+    function editarSalario() {
+        document.getElementById("saldo").focus();
+    }
+
+    function adicionarConta() {
+        const nomeConta = document.getElementById("nomeConta").value;
+        const valorConta = parseFloat(document.getElementById("valorConta").value);
+        const dataConta = document.getElementById("dataConta").value;
+
+        if (nomeConta.trim() === "" || isNaN(valorConta) || valorConta <= 0 || dataConta === "") {
+            alert("Por favor, preencha todos os campos corretamente.");
+            return;
+        }
+
+        if (valorConta > saldo) {
+            alert("Saldo insuficiente para adicionar esta conta.");
+            return;
+        }
+
+        saldo -= valorConta;
+        document.getElementById("saldo").innerText = saldo.toFixed(2);
+        localStorage.setItem('saldo', saldo);
+
+        const conta = {
+            nome: nomeConta,
+            valor: valorConta.toFixed(2),
+            data: dataConta,
+            pago: false // inicialmente, a conta não está paga
+        };
+
+        contas.push(conta);
+        localStorage.setItem('contas', JSON.stringify(contas));
+
+        atualizarListaContas();
+
+        document.getElementById("nomeConta").value = "";
+        document.getElementById("valorConta").value = "";
+        document.getElementById("dataConta").value = "";
+    }
+
+    function atualizarListaContas() {
+        const listaContas = document.getElementById("listaContas");
+        listaContas.innerHTML = "";
+
+        contas.forEach((conta, index) => {
+            const div = document.createElement("div");
+            div.dataset.posicao = index;
+            const dataFormatada = formatarData(conta.data);
+            const isChecked = conta.pago ? 'checked' : ''; // Verifica se a conta está paga
+            div.innerHTML = `
+                <label>
+                    <input type="checkbox" onclick="marcarPago(this)" ${isChecked}>
+                    ${conta.nome}: R$ ${conta.valor} <br> ${dataFormatada}
+                    <button onclick="excluirConta(${index})"><img src="img/lixeira.png" alt=""></button>
+                </label>
+            `;
+            listaContas.appendChild(div);
+        });
+
+        if (sortable) {
+            sortable.destroy();
+        }
+        inicializarListaOrdenavel();
+    }
+
+    function inicializarListaOrdenavel() {
+        sortable = new Sortable(listaContas, {
+            animation: 150,
+            ghostClass: 'ghost',
+            onEnd: function (evt) {
+                atualizarPosicoes();
+            }
+        });
+    }
+
+    function atualizarPosicoes() {
+        const itens = listaContas.querySelectorAll('div');
+        itens.forEach((item, index) => {
+            item.dataset.posicao = index;
+        });
+    }
+
+    function marcarPago(checkBox) {
+        const index = checkBox.parentElement.parentElement.dataset.posicao;
+        contas[index].pago = checkBox.checked;
+        localStorage.setItem('contas', JSON.stringify(contas));
+    }
+
+    function excluirConta(index) {
+        const valorConta = parseFloat(contas[index].valor);
+        saldo += valorConta;
+        document.getElementById("saldo").innerText = saldo.toFixed(2);
+        localStorage.setItem('saldo', saldo);
+
+        contas.splice(index, 1);
+        localStorage.setItem('contas', JSON.stringify(contas));
+
+        atualizarListaContas();
+    }
+
+    function formatarData(data) {
+        const partes = data.split("-");
+        return partes[2] + "/" + partes[1] + "/" + partes[0];
+    }
+
+    atualizarListaContas();
+</script>
+</body>
+</html>
