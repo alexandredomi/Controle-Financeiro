@@ -75,7 +75,7 @@ body{
     align-items: center;
     gap: 12px;
 }
-.lista .inputs #nomeConta, #valorConta, #dataConta{
+.lista .inputs #nomeConta, #valorConta, #dataConta[type="date"]{
     font-size: 18px;
     width: 100%;
     border: none;
