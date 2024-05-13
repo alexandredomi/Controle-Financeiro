@@ -3,24 +3,20 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<!--titulo da pagina-->
 <title>Contas a Pagar</title>
-<!--conte family-->
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap" rel="stylesheet">
-<!--link css-->
 <link rel="stylesheet" href="style.css">
-
 </head>
 <body>
 <div class="container">
     <div class="titulo">
-        <h2>Controle Finançeiro</h2>
+        <h2>Controle Financeiro</h2>
     </div>
     <div class="saldo">
         <p>Salário atual:</p>
-            <p>R$ <span id="saldo" contenteditable="true" onblur="atualizarSalario()">3000</span><button onclick="editarSalario()"><img src="img/escrever.png" alt=""></button></p> 
+        <p>R$ <span id="saldo" contenteditable="true" onblur="atualizarSalario()">3000</span><button onclick="editarSalario()"><img src="img/escrever.png" alt=""></button></p>
     </div>
 </div>
 <div class="lista">
@@ -30,17 +26,14 @@
         <input type="date" id="dataConta" placeholder="Data de vencimento">
         <button onclick="adicionarConta()">Guardar</button>
     </div>
-    <h2 class="titulohistorico">Historico</h2>
+    <h2 class="titulohistorico">Histórico</h2>
     <div id="listaContas" data-posicao="0"></div>
 </div>
 
-<script src="https://cdnjs.cloudflare.com/ajax/libs/Sortable/1.13.0/Sortable.min.js"></script>
 <script>
     let saldo = localStorage.getItem('saldo') ? parseFloat(localStorage.getItem('saldo')) : 3000;
     let contas = localStorage.getItem('contas') ? JSON.parse(localStorage.getItem('contas')) : [];
-    let sortable;
 
-    // Função para atualizar o saldo quando a página é carregada
     window.onload = function() {
         atualizarSaldoInicial();
     }
@@ -100,9 +93,8 @@
 
         contas.forEach((conta, index) => {
             const div = document.createElement("div");
-            div.dataset.posicao = index;
             const dataFormatada = formatarData(conta.data);
-            const isChecked = conta.pago ? 'checked' : ''; // Verifica se a conta está paga
+            const isChecked = conta.pago ? 'checked' : '';
             div.innerHTML = `
                 <label>
                     <input type="checkbox" onclick="marcarPago(this)" ${isChecked}>
@@ -111,28 +103,6 @@
                 </label>
             `;
             listaContas.appendChild(div);
-        });
-
-        if (sortable) {
-            sortable.destroy();
-        }
-        inicializarListaOrdenavel();
-    }
-
-    function inicializarListaOrdenavel() {
-        sortable = new Sortable(listaContas, {
-            animation: 150,
-            ghostClass: 'ghost',
-            onEnd: function (evt) {
-                atualizarPosicoes();
-            }
-        });
-    }
-
-    function atualizarPosicoes() {
-        const itens = listaContas.querySelectorAll('div');
-        itens.forEach((item, index) => {
-            item.dataset.posicao = index;
         });
     }
 
