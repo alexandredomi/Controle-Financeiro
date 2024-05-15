@@ -6,7 +6,7 @@
 <title>Contas a Pagar</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="style.css">
 </head>
 <body>
@@ -37,6 +37,7 @@
 
     window.onload = function() {
         atualizarSaldoInicial();
+        atualizarListaContas();
     }
 
     function atualizarSaldoInicial() {
@@ -102,12 +103,13 @@
 
         contas.forEach((conta, index) => {
             const div = document.createElement("div");
+            div.setAttribute('data-index', index); // Adicionando o índice aqui
             const dataFormatada = formatarData(conta.data);
             const isChecked = conta.pago ? 'checked' : '';
             div.innerHTML = `
                 <label>
                     <div class="checklabel">
-                        <input type="checkbox" onclick="marcarPago(this)" ${isChecked}>
+                        <input type="checkbox" onclick="marcarPago(this)" ${isChecked} data-index="${index}">
                     </div>
                     <div class="textlabel">
                         ${conta.nome} <br> R$ ${conta.valor} <br> ${dataFormatada}
@@ -122,7 +124,7 @@
     }
 
     function marcarPago(checkBox) {
-        const index = checkBox.parentElement.parentElement.dataset.posicao;
+        const index = checkBox.getAttribute('data-index'); // Obtendo o índice corretamente
         contas[index].pago = checkBox.checked;
         localStorage.setItem('contas', JSON.stringify(contas));
     }
@@ -156,8 +158,6 @@
         }
         input.value = valor;
     });
-
-    atualizarListaContas();
 </script>
 </body>
 </html>
